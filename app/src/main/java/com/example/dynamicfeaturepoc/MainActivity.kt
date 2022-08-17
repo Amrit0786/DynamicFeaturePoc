@@ -6,11 +6,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
@@ -21,6 +18,7 @@ import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 
 const val DYNAMIC_FEATURE_MODULE = "dynamicfeature"
 const val PROVIDER_CLASS = "com.example.dynamicfeature.DynamicModuleApiImpl\$Provider"
+const val TAG = "DynamicFeaturePoc"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var launchDynamicActivityBtn: Button
@@ -102,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                         val dynamicFeatureProvider =
                             Class.forName(PROVIDER_CLASS).kotlin.objectInstance as DynamicModuleApi.Provider
                         dynamicModuleApi = dynamicFeatureProvider.get()
-                        Log.d("Amrit", "Got the dynamic feature module")
+                        Log.d(TAG, "Got the dynamic feature module")
                         Toast.makeText(this, "Dynamic module installed", Toast.LENGTH_SHORT)
                             .show()
                         installed = true
@@ -121,13 +119,13 @@ class MainActivity : AppCompatActivity() {
         val request = SplitInstallRequest.newBuilder().addModule("dynamicfeature").build()
         splitInstallManager.startInstall(request)
             .addOnSuccessListener { sessionId ->
-                Log.d("Amrit", "Installing dynamic module")
+                Log.d(TAG, "Installing dynamic module")
                 mySessionId = sessionId
                 progress.visibility = View.VISIBLE
                 Toast.makeText(this, "Installation Started", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                Log.d("Amrit", "Installing failed")
+                Log.d(TAG, "Installing failed")
                 progress.visibility = View.GONE
                 Toast.makeText(this, "Installation failed $it", Toast.LENGTH_SHORT).show()
             }
